@@ -45,6 +45,51 @@ export function HeroSection() {
   const [open, setOpen] = useState(false);
   const typedText = useTypewriter(words);
 
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  // dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        "https://autoparts-sms-backend-325363198603.us-central1.run.app/api/accesslist",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to submit form");
+
+      setDialogMessage("✅ Successfully submitted!");
+      setDialogOpen(true);
+      setFormData({ fullName: "", email: "", phoneNumber: "" });
+    } catch (error) {
+      console.error(error);
+      setDialogMessage("❌ Something went wrong. Please try again.");
+      setDialogOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section
       id="home"
@@ -88,41 +133,75 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Modal */}
+      {/* Form Modal */}
       <ReusableModal
         open={open}
         onClose={() => setOpen(false)}
         title="Join Access"
-        className="h-auto w-[90%] max-w-md"
+        className="h-auto w-[500px] max-w-full"
       >
-        <div>
-          <form className="space-y-4">
-            <div>
-              <Label className="text-sm text-[#3C464D]">Email</Label>
-              <Input id="email" type="email" placeholder="Enter your email" />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label className="text-sm text-[#3C464D]">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <Label className="text-sm text-[#3C464D]">Full Name</Label>
+            <Input
+              id="fullName"
+              type="text"
+              placeholder="Enter your full name"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <Label className="text-sm text-[#3C464D]">Phone Number</Label>
+            <Input
+              id="phoneNumber"
+              type="tel"
+              placeholder="Enter your phone number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#3C464D] text-white rounded-xl hover:bg-[#2a3137]"
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
+        </form>
+      </ReusableModal>
 
-            <div>
-              <Label className="text-sm text-[#3C464D]">Name</Label>
-              <Input id="name" type="text" placeholder="Enter your name" />
-            </div>
-
-            <div>
-              <Label className="text-sm text-[#3C464D]">Phone</Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="Enter your phone number"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-[#3C464D] text-white rounded-xl hover:bg-[#2a3137]"
-            >
-              Submit
-            </Button>
-          </form>
+      {/* Confirmation Dialog */}
+      <ReusableModal
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        title="Message"
+        className="h-auto w-[400px] max-w-full text-center"
+      >
+        <p className="text-base text-[#3C464D]">{dialogMessage}</p>
+        <div className="mt-4 flex justify-center">
+          <Button
+            onClick={() => {
+              setDialogOpen(false);
+              if (dialogMessage.includes("✅")) setOpen(false); // close form modal if success
+            }}
+            className="bg-[#3C464D] text-white rounded-xl hover:bg-[#2a3137]"
+          >
+            OK
+          </Button>
         </div>
       </ReusableModal>
     </section>

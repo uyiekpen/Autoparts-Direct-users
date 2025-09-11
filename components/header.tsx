@@ -5,51 +5,89 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import { ReusableModal } from "./modal";
-import { Label } from "recharts";
+import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [openSheet, setOpenSheet] = useState(false);
+
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  // dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        "https://autoparts-sms-backend-325363198603.us-central1.run.app/api/accesslist",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to submit form");
+
+      setDialogMessage("✅ Successfully submitted!");
+      setDialogOpen(true);
+      setFormData({ fullName: "", email: "", phoneNumber: "" });
+    } catch (error) {
+      console.error(error);
+      setDialogMessage("❌ Something went wrong. Please try again.");
+      setDialogOpen(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <header className="bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/95 sticky top-0 z-50 w-full border-b border-border/40 shadow-sm">
-      <div className="container flex h-16 max-w-screen-xl items-center justify-between p-4 ">
+      <div className="container flex h-16 max-w-screen-xl items-center justify-between p-4">
         <a href="/" className="flex items-center">
-          <div className="relative ">
-            <img
-              src="/auto-parts-direct-logo.png"
-              alt="Auto Parts Direct Logo"
-              className="h-10 w-[100px] object-cover"
-            />
-          </div>
+          <img
+            src="/auto-parts-direct-logo.png"
+            alt="Auto Parts Direct Logo"
+            className="h-10 w-[100px] object-cover"
+          />
         </a>
 
         {/* Desktop Nav */}
-        <nav
-          className="hidden md:flex items-center space-x-6 text-sm font-medium"
-          aria-label="Main Navigation"
-        >
-          <a
-            href="/"
-            className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
-          >
+        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+          <a href="/" className="hover:text-brand-yellow text-brand-gunmetal">
             Home
           </a>
           <a
             href="#about"
-            className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+            className="hover:text-brand-yellow text-brand-gunmetal"
           >
             About
           </a>
           <a
             href="#services"
-            className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+            className="hover:text-brand-yellow text-brand-gunmetal"
           >
             Services
           </a>
           <a
             href="#contact"
-            className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+            className="hover:text-brand-yellow text-brand-gunmetal"
           >
             Contact Us
           </a>
@@ -60,14 +98,14 @@ export function Header() {
           variant="outline"
           onClick={() => setOpen(true)}
           size="sm"
-          className="hidden md:flex items-center gap-2 border-brand-gunmetal text-brand-gunmetal hover:bg-brand-yellow hover:text-brand-jet bg-transparent"
+          className="hidden md:flex items-center gap-2 border-brand-gunmetal text-brand-gunmetal hover:bg-brand-yellow hover:text-brand-jet"
         >
           Get Access
         </Button>
 
         {/* Mobile Menu */}
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={openSheet} onOpenChange={setOpenSheet}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
@@ -77,39 +115,44 @@ export function Header() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[250px]">
-              <nav
-                className="flex flex-col space-y-4 mt-8 text-sm font-medium"
-                aria-label="Mobile Navigation"
-              >
+
+            {/* Full width, short height (top dropdown) */}
+            <SheetContent
+              side="top"
+              className="w-full h-[280px] bg-white border-b shadow-lg"
+            >
+              <nav className="flex flex-col space-y-4 mt-6 text-sm font-medium px-6">
                 <a
                   href="#home"
-                  className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+                  className="hover:text-brand-yellow text-brand-gunmetal"
                 >
                   Home
                 </a>
                 <a
                   href="#about"
-                  className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+                  className="hover:text-brand-yellow text-brand-gunmetal"
                 >
                   About
                 </a>
                 <a
                   href="#services"
-                  className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+                  className="hover:text-brand-yellow text-brand-gunmetal"
                 >
                   Services
                 </a>
                 <a
                   href="#contact"
-                  className="transition-colors hover:text-brand-yellow text-brand-gunmetal"
+                  className="hover:text-brand-yellow text-brand-gunmetal"
                 >
                   Contact Us
                 </a>
                 <Button
                   size="lg"
-                  variant="outline"
-                  className="border-white text-white hover:bg-brand-yellow hover:text-slate-900 bg-transparent px-8"
+                  className="bg-brand-gunmetal text-white hover:bg-brand-yellow hover:text-brand-jet px-8 mt-4"
+                  onClick={() => {
+                    setOpenSheet(false);
+                    setOpen(true);
+                  }}
                 >
                   Join Access
                 </Button>
@@ -118,40 +161,76 @@ export function Header() {
           </Sheet>
         </div>
       </div>
+
+      {/* Form Modal */}
       <ReusableModal
         open={open}
         onClose={() => setOpen(false)}
         title="Join Access"
-        className="h-auto w-[500px]"
+        className="h-auto w-[500px] max-w-full"
       >
-        <div>
-          <form className="space-y-4">
-            <div>
-              <Label className="text-sm text-[#3C464D]">Email</Label>
-              <Input id="email" type="email" placeholder="Enter your email" />
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <Label className="text-sm text-[#3C464D]">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <Label className="text-sm text-[#3C464D]">Full Name</Label>
+            <Input
+              id="fullName"
+              type="text"
+              placeholder="Enter your full name"
+              value={formData.fullName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <Label className="text-sm text-[#3C464D]">Phone Number</Label>
+            <Input
+              id="phoneNumber"
+              type="tel"
+              placeholder="Enter your phone number"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#3C464D] text-white rounded-xl hover:bg-[#2a3137]"
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
+        </form>
+      </ReusableModal>
 
-            <div>
-              <Label className="text-sm text-[#3C464D]">Name</Label>
-              <Input id="name" type="name" placeholder="Enter your name" />
-            </div>
-
-            <div>
-              <Label className="text-sm text-[#3C464D]">Phone</Label>
-              <Input
-                id="phone"
-                type="tel"
-                placeholder="Enter your phone number"
-              />
-            </div>
-
-            <Button
-              type="submit"
-              className="w-full bg-[#3C464D] text-white rounded-xl hover:bg-[#2a3137]"
-            >
-              Submit
-            </Button>
-          </form>
+      {/* Confirmation Dialog */}
+      <ReusableModal
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        title="Message"
+        className="h-auto w-[400px] max-w-full text-center"
+      >
+        <p className="text-base text-[#3C464D]">{dialogMessage}</p>
+        <div className="mt-4 flex justify-center">
+          <Button
+            onClick={() => {
+              setDialogOpen(false);
+              if (dialogMessage.includes("✅")) setOpen(false); // close form modal if success
+            }}
+            className="bg-[#3C464D] text-white rounded-xl hover:bg-[#2a3137]"
+          >
+            OK
+          </Button>
         </div>
       </ReusableModal>
     </header>
