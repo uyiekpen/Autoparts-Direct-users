@@ -125,24 +125,28 @@ export function Header() {
                 <a
                   href="#home"
                   className="hover:text-brand-yellow text-brand-gunmetal"
+                  onClick={() => setOpenSheet(false)}
                 >
                   Home
                 </a>
                 <a
                   href="#about"
                   className="hover:text-brand-yellow text-brand-gunmetal"
+                  onClick={() => setOpenSheet(false)}
                 >
                   About
                 </a>
                 <a
                   href="#services"
                   className="hover:text-brand-yellow text-brand-gunmetal"
+                  onClick={() => setOpenSheet(false)}
                 >
                   Services
                 </a>
                 <a
                   href="#contact"
                   className="hover:text-brand-yellow text-brand-gunmetal"
+                  onClick={() => setOpenSheet(false)}
                 >
                   Contact Us
                 </a>
@@ -154,7 +158,7 @@ export function Header() {
                     setOpen(true);
                   }}
                 >
-                  Join Access
+                  Get Access
                 </Button>
               </nav>
             </SheetContent>

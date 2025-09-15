@@ -78,12 +78,12 @@ export function HeroSection() {
 
       if (!res.ok) throw new Error("Failed to submit form");
 
-      setDialogMessage("✅ Successfully submitted!");
+      setDialogMessage(" Successfully submitted!");
       setDialogOpen(true);
       setFormData({ fullName: "", email: "", phoneNumber: "" });
     } catch (error) {
       console.error(error);
-      setDialogMessage("❌ Something went wrong. Please try again.");
+      setDialogMessage(" Something went wrong. Please try again.");
       setDialogOpen(true);
     } finally {
       setLoading(false);
@@ -119,9 +119,9 @@ export function HeroSection() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button size="lg" className="bg-brand-yellow text-white px-8">
+          {/* <Button size="lg" className="bg-brand-yellow text-white px-8">
             Request a Part
-          </Button>
+          </Button> */}
           <Button
             size="lg"
             variant="outline"
