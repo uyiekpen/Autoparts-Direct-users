@@ -40,7 +40,7 @@ export function AboutSection() {
 
         if (!res.ok) throw new Error("Failed to submit form");
 
-        setDialogMessage("✅ Successfully submitted!");
+        setDialogMessage("Thank You! We've received your details");
         setDialogOpen(true);
         setFormData({ fullName: "", email: "", phoneNumber: "" });
       } catch (error) {
@@ -174,7 +174,7 @@ export function AboutSection() {
       <ReusableModal
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        title="Message"
+        title="Submission Complete"
         className="h-auto w-[400px] max-w-full text-center"
       >
         <p className="text-base text-[#3C464D]">{dialogMessage}</p>

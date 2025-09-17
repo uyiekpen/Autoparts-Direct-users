@@ -1,44 +1,17 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
+import MotionCards, { MotionCardContent } from "./ui/motioncards";
 
 export function FullServiceSection() {
-  const [highlighted, setHighlighted] = useState<string[]>([]);
-
-  const toggleHighlight = (service: string) => {
-    setHighlighted((prev) =>
-      prev.includes(service)
-        ? prev.filter((s) => s !== service)
-        : [...prev, service]
-    );
-  };
-
-  const ServiceCard = ({ service }: { service: string }) => (
-    <button
-      type="button"
-      onClick={() => toggleHighlight(service)}
-      className={`px-4 py-2 rounded-md text-sm w-[70%] sm:w-fit shadow-md transition 
-        ${
-          highlighted.includes(service)
-            ? "text-red-600 border border-red-200 bg-red-50 shadow-red-100"
-            : "text-gray-700 bg-white hover:shadow-lg"
-        }`}
-    >
-      {service}
-    </button>
-  );
-
-  const leftServices = [
+  const services = [
     "Alignments",
     "Check engine lights",
     "Oil changes",
-    "Ac repair",
-    "Timing belts head gaskets",
-    "Battery's, alternators, and starters",
+    "AC repair",
+    "Timing belts & head gaskets",
+    "Battery, alternators & starters",
     "Exhaust",
-  ];
-
-  const rightServices = [
     "Brakes",
     "Engine repair",
     "Transmission Flushes",
@@ -47,6 +20,15 @@ export function FullServiceSection() {
     "Tune-ups",
     "Service maintenance lights",
   ];
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <section id="services" className="py-16 bg-white">
@@ -61,31 +43,46 @@ export function FullServiceSection() {
           and a reflection of your lifestyle.
         </p>
 
-        {/* Services + Image */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-          {/* Left Services */}
-          <div className="flex flex-col items-center md:items-end gap-4">
-            {leftServices.map((service) => (
-              <ServiceCard key={service} service={service} />
+        {/* Layout */}
+        {isMobile ? (
+          // ✅ Mobile: Single animated list
+          <MotionCards interval={2000}>
+            {services.map((service) => (
+              <MotionCardContent key={service}>
+                <div>{service}</div>
+              </MotionCardContent>
             ))}
-          </div>
+          </MotionCards>
+        ) : (
+          // ✅ Desktop: Split left & right with image
+          <div className="grid grid-cols-3 gap-8 items-center">
+            <MotionCards interval={1500}>
+              {services
+                .slice(0, Math.ceil(services.length / 2))
+                .map((service) => (
+                  <MotionCardContent key={service}>
+                    <div>{service}</div>
+                  </MotionCardContent>
+                ))}
+            </MotionCards>
 
-          {/* Center Image */}
-          <div className="flex justify-center order-first md:order-none">
-            <img
-              src="/professional-mechanic-in-blue-uniform-working-in-m.jpg"
-              alt="Professional mechanic"
-              className="rounded-lg shadow-md w-full h-full object-contain"
-            />
-          </div>
+            <div className="flex justify-center">
+              <img
+                src="/mec.jpg"
+                alt="Professional mechanic"
+                className="rounded-lg shadow-md w-full h-[500px] object-cover"
+              />
+            </div>
 
-          {/* Right Services */}
-          <div className="flex flex-col items-center md:items-start gap-4">
-            {rightServices.map((service) => (
-              <ServiceCard key={service} service={service} />
-            ))}
+            <MotionCards interval={1500}>
+              {services.slice(Math.ceil(services.length / 2)).map((service) => (
+                <MotionCardContent key={service}>
+                  <div>{service}</div>
+                </MotionCardContent>
+              ))}
+            </MotionCards>
           </div>
-        </div>
+        )}
 
         {/* CTA Button */}
         <div className="mt-10">

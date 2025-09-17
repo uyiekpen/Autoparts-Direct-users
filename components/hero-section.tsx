@@ -78,7 +78,7 @@ export function HeroSection() {
 
       if (!res.ok) throw new Error("Failed to submit form");
 
-      setDialogMessage(" Successfully submitted!");
+        setDialogMessage("Thank You! We've received your details");
       setDialogOpen(true);
       setFormData({ fullName: "", email: "", phoneNumber: "" });
     } catch (error) {
@@ -99,7 +99,7 @@ export function HeroSection() {
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/mechanic-working-on-car-engine-in-professional-gar.jpg')`,
+          backgroundImage: `url('/hero.jpg')`,
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/50" />
@@ -188,7 +188,7 @@ export function HeroSection() {
       <ReusableModal
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        title="Message"
+        title="Submission Complete"
         className="h-auto w-[400px] max-w-full text-center"
       >
         <p className="text-base text-[#3C464D]">{dialogMessage}</p>
