@@ -110,7 +110,7 @@ export function AboutSection() {
                     className="bg-brand-yellow text-white px-4 py-2 rounded text-sm font-semibold cursor-pointer"
                     onClick={() => setOpen(true)}
                   >
-                    Get Access
+                    Get started
                   </div>
                 </div>
               </div>

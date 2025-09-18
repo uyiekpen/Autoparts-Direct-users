@@ -45,7 +45,7 @@ export function Header() {
 
       if (!res.ok) throw new Error("Failed to submit form");
 
-        setDialogMessage("Thank You! We've received your details");
+      setDialogMessage("Thank You! We've received your details");
       setDialogOpen(true);
       setFormData({ fullName: "", email: "", phoneNumber: "" });
     } catch (error) {
@@ -100,7 +100,7 @@ export function Header() {
           size="sm"
           className="hidden md:flex items-center gap-2 border-brand-gunmetal text-brand-gunmetal hover:bg-brand-yellow hover:text-brand-jet"
         >
-          Get Access
+          Get Started
         </Button>
 
         {/* Mobile Menu */}
@@ -158,7 +158,7 @@ export function Header() {
                     setOpen(true);
                   }}
                 >
-                  Get Access
+                  Get Started
                 </Button>
               </nav>
             </SheetContent>

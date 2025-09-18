@@ -128,7 +128,7 @@ export function HeroSection() {
             className="border-white text-white hover:bg-white hover:text-slate-900 bg-transparent px-8"
             onClick={() => setOpen(true)}
           >
-            Get Access
+            Get Started
           </Button>
         </div>
       </div>
