@@ -78,7 +78,7 @@ export function AboutSection() {
           <div className="space-y-8">
             {/* Full Service Promise */}
             <div className="bg-slate-800 text-white p-8 rounded-lg">
-              <h4 className="text-xl font-bold mb-4">COMING SOON</h4>
+              {/* <h4 className="text-xl font-bold mb-4">COMING SOON</h4> */}
               <p className="text-sm mb-4 text-gray-300">
                 Here’s what you’ll be able to do with AutoPart Direct:
               </p>
@@ -101,7 +101,7 @@ export function AboutSection() {
               <div className="mt-6 pt-6 border-t border-gray-600">
                 <div className="flex items-center justify-between">
                   <div>
-                    <div className="text-xs text-gray-400">EARLY ACCESS</div>
+                    <div className="text-xs text-gray-400">GET ACCESS</div>
                     <div className="font-bold">
                       Be among the first to use AutoPart Direct
                     </div>

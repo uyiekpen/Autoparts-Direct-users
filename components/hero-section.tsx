@@ -68,7 +68,7 @@ export function HeroSection() {
 
     try {
       const res = await fetch(
-        "https://autoparts-sms-backend-325363198603.us-central1.run.app/api/accesslist",
+        "https://autoparts-sms-backend-325363198603.us-central1.run.app/api/accesslist/user",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -113,10 +113,10 @@ export function HeroSection() {
           <span className="animate-pulse">|</span>
         </h1>
 
-        <p className="text-base sm:text-lg md:text-xl mb-8 text-white/90 leading-relaxed max-w-2xl">
+        {/* <p className="text-base sm:text-lg md:text-xl mb-8 text-white/90 leading-relaxed max-w-2xl">
           Reliable car parts and trusted mechanics. Request a part or book a
           mechanic everything your car needs, in one place.
-        </p>
+        </p> */}
 
         <div className="flex flex-col sm:flex-row gap-4">
           {/* <Button size="lg" className="bg-brand-yellow text-white px-8">

@@ -4,7 +4,7 @@ export default function FlowingLogosDemo() {
   return (
     <section className="py-10 h-[200px] ">
       <h2 className="text-2xl font-bold mb-6 text-center">
-        Car Brands We Work With
+        Car Brands We Service
       </h2>
       <div className="flex justify-center">
         <FlowingLogos

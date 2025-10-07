@@ -90,7 +90,7 @@ export function FullServiceSection() {
             variant="outline"
             className="rounded-full px-6 py-2 text-gray-700 border-gray-300 hover:bg-gray-100"
           >
-            Much more
+            Request a part{" "}
           </Button>
         </div>
       </div>

@@ -35,7 +35,7 @@ export function Header() {
 
     try {
       const res = await fetch(
-        "https://autoparts-sms-backend-325363198603.us-central1.run.app/api/accesslist",
+        "https://autoparts-sms-backend-325363198603.us-central1.run.app/api/accesslist/user",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
